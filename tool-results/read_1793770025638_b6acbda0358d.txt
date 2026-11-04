@@ -1,0 +1,1170 @@
+     1→# AI-Powered Smart Study Planner & Syllabus Breakdown Tool
+     2→
+     3→## Software Requirements Specification (SRS)
+     4→
+     5→**Document version:** 1.0\
+     6→**Project type:** Academic / 5th-semester project\
+     7→**Proposed implementation:** Python, Streamlit, pandas, NumPy, Plotly or
+     8→Altair\
+     9→**Deployment target:** Local laptop or lightweight hosted Python
+    10→environment
+    11→
+    12→------------------------------------------------------------------------
+    13→
+    14→## 1. Introduction
+    15→
+    16→### 1.1 Purpose
+    17→
+    18→The AI-Powered Smart Study Planner & Syllabus Breakdown Tool is a
+    19→student-focused application that converts a syllabus into a practical,
+    20→personalized study schedule. Students provide their subjects or
+    21→chapters, examination date, available daily study hours, and familiarity
+    22→with each topic. The application estimates topic complexity, allocates
+    23→preparation time, and generates a day-by-day study plan.
+    24→
+    25→This document defines the functional requirements, non-functional
+    26→requirements, data model, algorithms, interfaces, constraints,
+    27→assumptions, and acceptance criteria for the proposed system. It is
+    28→intended for student developers, project guides, evaluators, testers,
+    29→and future maintainers.
+    30→
+    31→### 1.2 Problem Statement
+    32→
+    33→Students preparing for semester examinations and competitive
+    34→examinations often have difficulty deciding: - Which chapters should be
+    35→studied first. - How much time each topic requires. - How to divide a
+    36→large syllabus into daily targets. - How to adjust a plan when the
+    37→examination date is near. - How to monitor completed work and identify
+    38→topics that need revision.
+    39→
+    40→A fixed timetable does not account for differences in topic difficulty
+    41→or a student's existing knowledge. The proposed application addresses
+    42→this problem by estimating topic preparation effort and distributing
+    43→available study time according to topic complexity, familiarity,
+    44→priority, and the time remaining before the examination.
+    45→
+    46→### 1.3 Project Objectives
+    47→
+    48→The system shall:
+    49→
+    50→1.  Allow students to select a predefined subject or enter a custom
+    51→    syllabus.
+    52→2.  Accept chapter-level topic information and difficulty-related
+    53→    attributes.
+    54→3.  Calculate a transparent Topic Complexity Score.
+    55→4.  Estimate preparation time for each topic.
+    56→5.  Personalize estimates using the student's familiarity level.
+    57→6.  Generate a realistic schedule between the current date and the
+    58→    examination date.
+    59→7.  Prioritize important topics when preparation time is limited.
+    60→8.  Display the schedule through a calendar, timeline, or Gantt chart.
+    61→9.  Allow students to record progress and mark topics as completed.
+    62→10. Recalculate remaining targets when progress or available time
+    63→    changes.
+    64→
+    65→### 1.4 Scope
+    66→
+    67→**Included in scope** - Subject and chapter selection. - Custom syllabus
+    68→entry and optional CSV upload. - Topic difficulty and preparation-time
+    69→estimation using a rule-based model. - Familiarity-based
+    70→personalization. - Exam-date and daily-study-hours configuration. -
+    71→Day-wise study schedule generation. - High-yield prioritization under
+    72→time constraints. - Progress tracking and schedule summaries. -
+    73→Interactive charts and downloadable schedule data. - Local file-based
+    74→subject and topic dataset.
+    75→
+    76→**Outside the initial scope** - Automatic extraction of a complete
+    77→syllabus from arbitrary PDFs or images. - Guaranteed prediction of
+    78→examination questions. - Automatic access to university or
+    79→examination-board portals. - Live collaboration between multiple
+    80→students. - Paid tutoring, video lessons, or learning-management
+    81→functionality. - A trained machine-learning model requiring a large
+    82→labeled dataset. - Mobile-native applications and offline
+    83→synchronization across devices.
+    84→
+    85→These features may be considered for future versions.
+    86→
+    87→### 1.5 Intended Users
+    88→
+    89→  -----------------------------------------------------------------------
+    90→  User                                Description
+    91→  ----------------------------------- -----------------------------------
+    92→  Student                             Creates a study plan, updates
+    93→                                      familiarity, and tracks progress.
+    94→
+    95→  Project evaluator                   Reviews the workflow, algorithm,
+    96→                                      dashboard, and outputs.
+    97→
+    98→  Developer / maintainer              Updates datasets, formulas,
+    99→                                      validation rules, and application
+   100→                                      features.
+   101→  -----------------------------------------------------------------------
+   102→
+   103→### 1.6 Definitions and Abbreviations
+   104→
+   105→  -----------------------------------------------------------------------
+   106→  Term                                Meaning
+   107→  ----------------------------------- -----------------------------------
+   108→  Syllabus                            A collection of subjects, chapters,
+   109→                                      and topics to prepare.
+   110→
+   111→  Topic                               The smallest schedulable unit of
+   112→                                      study.
+   113→
+   114→  Complexity Score                    A weighted score representing the
+   115→                                      estimated difficulty of a topic.
+   116→
+   117→  Familiarity                         The student's self-reported prior
+   118→                                      knowledge of a topic.
+   119→
+   120→  Preparation Time                    Estimated hours needed to study a
+   121→                                      topic.
+   122→
+   123→  High-Yield Mode                     A constrained-planning mode that
+   124→                                      gives preference to higher-priority
+   125→                                      topics.
+   126→
+   127→  Gantt Chart                         A timeline chart showing when
+   128→                                      scheduled tasks begin and end.
+   129→
+   130→  CSV                                 Comma-Separated Values file format.
+   131→
+   132→  UI                                  User Interface.
+   133→
+   134→  SRS                                 Software Requirements
+   135→                                      Specification.
+   136→  -----------------------------------------------------------------------
+   137→
+   138→------------------------------------------------------------------------
+   139→
+   140→## 2. Overall Description
+   141→
+   142→### 2.1 Product Perspective
+   143→
+   144→The application is a standalone, data-driven Python web application.
+   145→Streamlit provides the user interface, while a separate planning engine
+   146→validates inputs, calculates complexity and estimated effort, and
+   147→generates the schedule. pandas and NumPy support tabular processing and
+   148→calculations. Plotly or Altair presents the schedule and progress
+   149→visually.
+   150→
+   151→The system can run locally on a standard laptop. It does not require a
+   152→GPU, a dedicated server, or a cloud database for the initial version.
+   153→
+   154→### 2.2 High-Level Architecture
+   155→
+   156→``` text
+   157→+-------------------------------+
+   158→|          Student              |
+   159→| Subject, Syllabus, Exam Date,  |
+   160→| Daily Hours, Familiarity       |
+   161→+---------------+---------------+
+   162→                |
+   163→                v
+   164→+-------------------------------+
+   165→|       Streamlit Interface     |
+   166→| Input Forms, Validation,      |
+   167→| Dashboard, Progress Controls  |
+   168→+---------------+---------------+
+   169→                |
+   170→                v
+   171→+-------------------------------+
+   172→|       Planning Engine         |
+   173→| Complexity Calculation        |
+   174→| Time Estimation               |
+   175→| Priority Calculation          |
+   176→| Schedule Generation           |
+   177→+---------------+---------------+
+   178→                |
+   179→        +-------+-------+
+   180→        |               |
+   181→        v               v
+   182→+---------------+  +----------------+
+   183→| Subject Data  |  | Progress Data  |
+   184→| JSON / CSV    |  | Local Storage  |
+   185→+---------------+  +----------------+
+   186→        |               |
+   187→        +-------+-------+
+   188→                |
+   189→                v
+   190→+-------------------------------+
+   191→|       Results Dashboard       |
+   192→| Daily Plan, Gantt Chart,      |
+   193→| Priority List, Progress       |
+   194→| Summary, Export               |
+   195→+-------------------------------+
+   196→```
+   197→
+   198→### 2.3 Product Functions
+   199→
+   200→The major functions of the application are:
+   201→
+   202→1.  Subject selection and syllabus management.
+   203→2.  Topic attribute collection.
+   204→3.  Input validation.
+   205→4.  Complexity score calculation.
+   206→5.  Personalized preparation-time estimation.
+   207→6.  Topic priority calculation.
+   208→7.  Schedule generation and workload balancing.
+   209→8.  High-yield planning when time is insufficient.
+   210→9.  Progress tracking and schedule recalculation.
+   211→10. Visualization and export of the generated plan.
+   212→
+   213→### 2.4 Operating Environment
+   214→
+   215→  -----------------------------------------------------------------------
+   216→  Component                           Requirement
+   217→  ----------------------------------- -----------------------------------
+   218→  Operating system                    Windows 10/11, Linux, or macOS
+   219→
+   220→  Programming language                Python 3.10 or later
+   221→
+   222→  User interface                      Streamlit
+   223→
+   224→  Data processing                     pandas and NumPy
+   225→
+   226→  Visualization                       Plotly or Altair
+   227→
+   228→  Data format                         JSON and/or CSV
+   229→
+   230→  Browser                             Recent version of Chrome, Edge,
+   231→                                      Firefox, or Safari
+   232→
+   233→  Hardware                            Basic laptop; 4 GB RAM minimum
+   234→                                      recommended
+   235→
+   236→  Execution                           Local Streamlit server or
+   237→                                      compatible Python hosting
+   238→                                      environment
+   239→  -----------------------------------------------------------------------
+   240→
+   241→### 2.5 User Characteristics
+   242→
+   243→The target user is a student with basic computer knowledge. The
+   244→application should not require programming knowledge. Labels, help text,
+   245→validation messages, and charts should be understandable to a general
+   246→student.
+   247→
+   248→### 2.6 Assumptions and Dependencies
+   249→
+   250→-   The student provides a reasonably complete and accurate syllabus.
+   251→-   Familiarity ratings are subjective and may not perfectly represent
+   252→    actual knowledge.
+   253→-   Baseline topic attributes and preparation times are maintained in
+   254→    the local dataset.
+   255→-   The current date and examination date use the same local calendar
+   256→    context.
+   257→-   The student enters the number of hours they can realistically study
+   258→    each day.
+   259→-   The first version uses a rule-based estimation engine rather than
+   260→    claiming to use a trained AI model.
+   261→-   The application depends on compatible versions of Python packages
+   262→    listed in the project dependency file.
+   263→
+   264→------------------------------------------------------------------------
+   265→
+   266→## 3. Functional Requirements
+   267→
+   268→Requirements are identified using IDs so that they can be referenced
+   269→during development and testing.
+   270→
+   271→### 3.1 Subject and Syllabus Management
+   272→
+   273→**FR-01 --- Subject Selection**\
+   274→The system shall display a list of predefined subjects from the internal
+   275→dataset.
+   276→
+   277→**FR-02 --- Subject Details**\
+   278→After subject selection, the system shall display the available modules,
+   279→chapters, or topics belonging to that subject.
+   280→
+   281→**FR-03 --- Custom Syllabus**\
+   282→The system shall allow a student to enter a custom subject name and add
+   283→chapters or topics manually.
+   284→
+   285→**FR-04 --- CSV Import**\
+   286→The system should allow the student to upload a CSV file containing
+   287→topic details. The system shall validate the file's columns and values
+   288→before accepting it.
+   289→
+   290→**FR-05 --- Topic Editing**\
+   291→The system shall allow the student to add, edit, and remove topics
+   292→before generating the schedule.
+   293→
+   294→**FR-06 --- Topic Attributes**\
+   295→Each topic shall support the following attributes: - Topic or chapter
+   296→name. - Estimated page count or content-length value. - Mathematical
+   297→density from 1 to 5. - Conceptual depth from 1 to 5. - Historical
+   298→difficulty or failure rating from 1 to 5. - Syllabus weightage or
+   299→importance, where known. - Baseline preparation time in hours, where
+   300→available.
+   301→
+   302→### 3.2 Student Input
+   303→
+   304→**FR-07 --- Examination Date**\
+   305→The system shall allow the student to select an examination date.
+   306→
+   307→**FR-08 --- Daily Study Availability**\
+   308→The system shall accept the number of study hours available per day.
+   309→
+   310→**FR-09 --- Familiarity Rating**\
+   311→The system shall allow the student to select a familiarity level for
+   312→every topic.
+   313→
+   314→The initial familiarity levels shall be: - Completely New. - Basic
+   315→Understanding. - Familiar. - Revised Before.
+   316→
+   317→**FR-10 --- Optional Study Preferences**\
+   318→The system may allow the student to specify: - Preferred study days. -
+   319→Weekly rest days. - Daily maximum study hours. - A revision buffer
+   320→before the examination. - A preferred daily study-session duration.
+   321→
+   322→**FR-11 --- Input Validation**\
+   323→The system shall reject invalid dates, negative study hours, empty topic
+   324→names, invalid rating values, and malformed uploaded files. It shall
+   325→show a clear message explaining how to correct the input.
+   326→
+   327→### 3.3 Complexity Analytics Engine
+   328→
+   329→**FR-12 --- Complexity Score**\
+   330→The system shall calculate a complexity score for each topic using a
+   331→weighted formula based on mathematical density, conceptual depth, and
+   332→historical difficulty.
+   333→
+   334→**FR-13 --- Familiarity Adjustment**\
+   335→The system shall adjust the estimated preparation time according to the
+   336→student's familiarity rating.
+   337→
+   338→**FR-14 --- Preparation-Time Estimation**\
+   339→The system shall estimate the hours required for every topic using its
+   340→baseline preparation time and complexity/familiarity adjustments.
+   341→
+   342→**FR-15 --- Topic Priority**\
+   343→The system shall calculate a priority value using available information
+   344→such as topic importance, complexity, and preparation effort.
+   345→
+   346→**FR-16 --- Transparent Results**\
+   347→The system shall show the complexity score, familiarity adjustment, and
+   348→estimated preparation time so that students can understand why a topic
+   349→received its allocation.
+   350→
+   351→### 3.4 Study Schedule Generation
+   352→
+   353→**FR-17 --- Available-Time Calculation**\
+   354→The system shall calculate the number of available study days between
+   355→the current date and the examination date.
+   356→
+   357→**FR-18 --- Daily Capacity**\
+   358→The system shall calculate daily study capacity using the student's
+   359→available hours and any configured rest days or daily limits.
+   360→
+   361→**FR-19 --- Day-by-Day Plan**\
+   362→The system shall distribute topics across available days and generate a
+   363→dated daily study schedule.
+   364→
+   365→**FR-20 --- Workload Balancing**\
+   366→The system should distribute study hours as evenly as practical while
+   367→respecting topic effort estimates and daily capacity.
+   368→
+   369→**FR-21 --- Topic Ordering**\
+   370→The system shall consider topic priority and prerequisite order, if
+   371→prerequisite information is supplied.
+   372→
+   373→**FR-22 --- High-Yield Mode**\
+   374→When total estimated preparation time exceeds available study time, the
+   375→system shall activate a constrained planning mode. It shall prioritize
+   376→high-importance topics and clearly identify topics that are shortened,
+   377→deferred, or not scheduled.
+   378→
+   379→**FR-23 --- Revision Buffer**\
+   380→If the student enables a revision buffer, the system should reserve the
+   381→configured time before the examination for revision and practice.
+   382→
+   383→**FR-24 --- Insufficient-Time Warning**\
+   384→The system shall warn the student when the available time is
+   385→insufficient to complete all topics at their estimated preparation
+   386→times.
+   387→
+   388→**FR-25 --- Schedule Regeneration**\
+   389→The system shall regenerate the remaining schedule when the student
+   390→changes the exam date, daily study hours, topic list, or other relevant
+   391→planning inputs.
+   392→
+   393→### 3.5 Dashboard and Visualization
+   394→
+   395→**FR-26 --- Dashboard Summary**\
+   396→The system shall display: - Subject name. - Examination date. - Days
+   397→remaining. - Total estimated study hours. - Available study hours. -
+   398→Number of topics. - Number of scheduled and completed topics.
+   399→
+   400→**FR-27 --- Daily Timeline**\
+   401→The system shall display the date, assigned topics, and estimated hours
+   402→for each study day.
+   403→
+   404→**FR-28 --- Gantt Chart**\
+   405→The system shall display an interactive timeline or Gantt-style chart
+   406→showing topic start dates, end dates, and duration.
+   407→
+   408→**FR-29 --- Priority Visualization**\
+   409→The system should visually distinguish high-, medium-, and low-priority
+   410→topics.
+   411→
+   412→**FR-30 --- Progress Visualization**\
+   413→The system shall display progress using a progress bar, chart, or
+   414→completion summary.
+   415→
+   416→**FR-31 --- Responsive Layout**\
+   417→The dashboard should remain usable on common laptop and desktop screen
+   418→sizes.
+   419→
+   420→### 3.6 Progress Tracking and Export
+   421→
+   422→**FR-32 --- Mark Completion**\
+   423→The system shall allow the student to mark a topic or scheduled task as
+   424→completed.
+   425→
+   426→**FR-33 --- Progress Update**\
+   427→The system shall update completion statistics when a task is marked
+   428→complete or incomplete.
+   429→
+   430→**FR-34 --- Progress Persistence**\
+   431→The system should preserve progress between application sessions using a
+   432→local data file or another configured persistence mechanism.
+   433→
+   434→**FR-35 --- Download Schedule**\
+   435→The system shall allow the student to download the generated schedule in
+   436→CSV format.
+   437→
+   438→**FR-36 --- Reset Plan**\
+   439→The system shall provide a clearly labeled option to reset the current
+   440→plan and its progress after confirmation.
+   441→
+   442→------------------------------------------------------------------------
+   443→
+   444→## 4. Data Requirements
+   445→
+   446→### 4.1 Data Sources
+   447→
+   448→The initial version shall use a small, curated internal dataset rather
+   449→than depending on a large external dataset. Data may be stored in JSON
+   450→or CSV files.
+   451→
+   452→Possible subject categories include: - Computer Science. - Data
+   453→Structures. - Database Management Systems. - Operating Systems. -
+   454→Software Engineering. - Computer Networks. - Mathematics.
+   455→
+   456→The actual subjects and topic values must be reviewed and populated by
+   457→the project team. Example values are illustrative and must not be
+   458→presented as verified examination statistics.
+   459→
+   460→### 4.2 Topic Data Fields
+   461→
+   462→  -----------------------------------------------------------------------------
+   463→  Field                   Data type         Description       Validation
+   464→  ----------------------- ----------------- ----------------- -----------------
+   465→  topic_id                String            Unique topic      Required, unique
+   466→                                            identifier        
+   467→
+   468→  subject_id              String            Parent subject    Required
+   469→                                            identifier        
+   470→
+   471→  chapter_name            String            Chapter or topic  Required
+   472→                                            name              
+   473→
+   474→  page_count              Integer           Approximate       Zero or positive
+   475→                                            content length    
+   476→
+   477→  math_density            Integer           Mathematical      1--5
+   478→                                            intensity         
+   479→
+   480→  concept_depth           Integer           Conceptual        1--5
+   481→                                            difficulty        
+   482→
+   483→  historical_difficulty   Integer           General           1--5
+   484→                                            difficulty        
+   485→                                            estimate          
+   486→
+   487→  importance              Integer           Syllabus or exam  1--5
+   488→                                            importance        
+   489→
+   490→  base_hours              Float             Baseline          Positive
+   491→                                            preparation time  
+   492→
+   493→  prerequisite_ids        Array/String      Optional          Must reference
+   494→                                            prerequisite      valid topics
+   495→                                            topics            
+   496→  -----------------------------------------------------------------------------
+   497→
+   498→### 4.3 Example JSON Structure
+   499→
+   500→``` json
+   501→{
+   502→  "subjects": [
+   503→    {
+   504→      "subject_id": "CS101",
+   505→      "subject_name": "Data Structures",
+   506→      "topics": [
+   507→        {
+   508→          "topic_id": "DS001",
+   509→          "chapter_name": "Arrays",
+   510→          "page_count": 12,
+   511→          "math_density": 2,
+   512→          "concept_depth": 2,
+   513→          "historical_difficulty": 2,
+   514→          "importance": 4,
+   515→          "base_hours": 2.0,
+   516→          "prerequisite_ids": []
+   517→        },
+   518→        {
+   519→          "topic_id": "DS002",
+   520→          "chapter_name": "Trees",
+   521→          "page_count": 25,
+   522→          "math_density": 3,
+   523→          "concept_depth": 4,
+   524→          "historical_difficulty": 4,
+   525→          "importance": 5,
+   526→          "base_hours": 4.0,
+   527→          "prerequisite_ids": ["DS001"]
+   528→        }
+   529→      ]
+   530→    }
+   531→  ]
+   532→}
+   533→```
+   534→
+   535→### 4.4 Example CSV Structure
+   536→
+   537→``` csv
+   538→topic_id,subject_id,chapter_name,page_count,math_density,concept_depth,historical_difficulty,importance,base_hours
+   539→DS001,CS101,Arrays,12,2,2,2,4,2.0
+   540→DS002,CS101,Trees,25,3,4,4,5,4.0
+   541→```
+   542→
+   543→### 4.5 Student Plan Data
+   544→
+   545→The system should maintain the following user-plan information:
+   546→
+   547→  Field               Description
+   548→  ------------------- ------------------------------------
+   549→  plan_id             Unique plan identifier
+   550→  subject_id          Selected subject
+   551→  exam_date           Target examination date
+   552→  daily_hours         Available study hours per day
+   553→  topic_familiarity   Familiarity value for each topic
+   554→  scheduled_tasks     Topic/date/hour assignments
+   555→  completion_status   Pending, in progress, or completed
+   556→  created_at          Plan creation date/time
+   557→  updated_at          Last modification date/time
+   558→
+   559→The initial version may store this data in JSON or CSV. A database is
+   560→not mandatory for the first release.
+   561→
+   562→------------------------------------------------------------------------
+   563→
+   564→## 5. Complexity and Planning Algorithms
+   565→
+   566→### 5.1 Complexity Score
+   567→
+   568→The complexity engine shall use a weighted, explainable rule-based
+   569→formula.
+   570→
+   571→Let:
+   572→
+   573→-   (M_i) = Mathematical Density of topic (i), from 1 to 5.
+   574→-   (C_i) = Conceptual Depth of topic (i), from 1 to 5.
+   575→-   (H_i) = Historical Difficulty of topic (i), from 1 to 5.
+   576→-   (w_1, w_2, w_3) = configurable weights.
+   577→
+   578→The raw complexity score is:
+   579→
+   580→\[ RawScore_i = (w_1 `\times `{=tex}M_i) + (w_2 `\times `{=tex}C_i) +
+   581→(w_3 `\times `{=tex}H_i) \]
+   582→
+   583→The weights shall sum to 1.0. A suggested initial configuration is:
+   584→
+   585→\[ w_1 = 0.30,`\quad `{=tex}w_2 = 0.40,`\quad `{=tex}w_3 = 0.30 \]
+   586→
+   587→The normalized complexity score on a 0--100 scale is:
+   588→
+   589→\[ Complexity_i = `\frac{RawScore_i - 1}{4}`{=tex} `\times 100`{=tex} \]
+   590→
+   591→This normalization assumes all three input ratings use a 1--5 scale and
+   592→the weights sum to 1.0.
+   593→
+   594→Suggested interpretation:
+   595→
+   596→  Score     Difficulty category
+   597→  --------- ---------------------
+   598→  0--33     Low
+   599→  34--66    Medium
+   600→  67--100   High
+   601→
+   602→The exact category boundaries should be configurable.
+   603→
+   604→### 5.2 Familiarity Adjustment
+   605→
+   606→The student's familiarity level modifies the baseline preparation time.
+   607→
+   608→Suggested initial multipliers:
+   609→
+   610→  Familiarity             Multiplier
+   611→  --------------------- ------------
+   612→  Completely New                1.50
+   613→  Basic Understanding           1.20
+   614→  Familiar                      1.00
+   615→  Revised Before                0.75
+   616→
+   617→These values are initial project assumptions and should be tested with
+   618→sample student feedback.
+   619→
+   620→### 5.3 Preparation-Time Estimation
+   621→
+   622→If a baseline preparation time exists, the system shall calculate:
+   623→
+   624→\[ EstimatedHours_i = BaseHours_i `\times `{=tex}ComplexityFactor_i
+   625→`\times `{=tex}FamiliarityMultiplier_i \]
+   626→
+   627→A suggested complexity factor is:
+   628→
+   629→\[ ComplexityFactor_i = 0.75 + `\frac{Complexity_i}{200}`{=tex} \]
+   630→
+   631→This produces a factor from 0.75 to 1.25 when the normalized score
+   632→ranges from 0 to 100.
+   633→
+   634→If baseline hours are unavailable, the application may estimate them
+   635→from page count and a configurable base reading/study rate. The chosen
+   636→fallback rule must be visible to the student and documented in the
+   637→application.
+   638→
+   639→The system shall round displayed estimates to a practical precision,
+   640→such as the nearest 0.25 hour, while retaining sufficient precision
+   641→internally for scheduling.
+   642→
+   643→### 5.4 Topic Priority
+   644→
+   645→A suggested priority score is:
+   646→
+   647→\[ Priority_i = (0.50 `\times `{=tex}Importance_i) + (0.30
+   648→`\times `{=tex}NormalizedComplexity_i) + (0.20
+   649→`\times `{=tex}NormalizedEffort_i) \]
+   650→
+   651→All three inputs must first be normalized to a common 0--100 scale. The
+   652→weights are configurable. The application should explain that priority
+   653→is a planning aid, not a prediction of examination questions.
+   654→
+   655→If syllabus importance is unavailable, the system shall use a documented
+   656→fallback and shall not silently treat missing importance as verified
+   657→exam weightage.
+   658→
+   659→### 5.5 Available-Time Calculation
+   660→
+   661→Let:
+   662→
+   663→-   \(D\) = number of usable study days before the examination.
+   664→-   (H_d) = available study hours per day.
+   665→-   \(B\) = hours reserved for revision or practice, if enabled.
+   666→
+   667→Then:
+   668→
+   669→\[ AvailableHours = (D `\times `{=tex}H_d) - B \]
+   670→
+   671→The examination day shall not be counted as a full study day by default.
+   672→The system shall prevent schedules from assigning work after the
+   673→examination date.
+   674→
+   675→### 5.6 Schedule Generation
+   676→
+   677→The schedule generator shall:
+   678→
+   679→1.  Validate the exam date and daily study availability.
+   680→2.  Determine usable study days and rest days.
+   681→3.  Calculate estimated hours and priority for every topic.
+   682→4.  Respect prerequisite order when prerequisite information is
+   683→    provided.
+   684→5.  Sort or select topics using priority and prerequisite constraints.
+   685→6.  Allocate topic hours across available days without exceeding daily
+   686→    capacity.
+   687→7.  Split long topics across multiple days when necessary.
+   688→8.  Reserve revision time if configured.
+   689→9.  identify any unallocated or unscheduled work.
+   690→10. Return a schedule with dates, topics, hours, and status.
+   691→
+   692→The implementation may use a greedy allocation algorithm for the first
+   693→version. The algorithm should be deterministic for the same inputs so
+   694→that results are repeatable and testable.
+   695→
+   696→### 5.7 High-Yield Mode
+   697→
+   698→High-Yield Mode shall activate when:
+   699→
+   700→\[ TotalEstimatedHours \> AvailableHours \]
+   701→
+   702→In this mode, the application shall: - Prefer topics with higher
+   703→priority. - Respect known prerequisites where possible. - Allocate
+   704→available time according to priority and estimated effort. - Mark topics
+   705→receiving reduced time. - Identify topics that could not be scheduled. -
+   706→Show a clear warning that the plan is compressed and may not cover every
+   707→topic adequately.
+   708→
+   709→The system shall never imply that a compressed plan guarantees
+   710→examination readiness.
+   711→
+   712→### 5.8 Schedule Quality Rules
+   713→
+   714→The generated plan should satisfy these rules:
+   715→
+   716→-   No task shall have a negative duration.
+   717→-   No daily allocation shall exceed the configured daily limit.
+   718→-   No task shall be scheduled after the exam date.
+   719→-   Every input topic shall be accounted for as scheduled, completed,
+   720→    deferred, or unscheduled.
+   721→-   Total assigned hours shall not exceed available hours.
+   722→-   Prerequisites should be scheduled before dependent topics when
+   723→    feasible.
+   724→-   Revision time shall not overlap with the examination date.
+   725→-   Rounding shall not cause the daily capacity to be exceeded.
+   726→
+   727→------------------------------------------------------------------------
+   728→
+   729→## 6. External Interface Requirements
+   730→
+   731→### 6.1 User Interface
+   732→
+   733→The application shall use Streamlit and provide the following screens or
+   734→sections.
+   735→
+   736→#### A. Home / Dashboard
+   737→
+   738→-   Project name and short description.
+   739→-   Create-plan action.
+   740→-   Existing plan summary, if persistence is enabled.
+   741→-   Quick explanation of the planning process.
+   742→
+   743→#### B. Syllabus Setup
+   744→
+   745→-   Subject dropdown.
+   746→-   Custom subject entry.
+   747→-   Chapter/topic table.
+   748→-   Add, edit, and remove topic controls.
+   749→-   CSV upload option.
+   750→-   Validation feedback.
+   751→
+   752→#### C. Planning Inputs
+   753→
+   754→-   Examination date picker.
+   755→-   Daily available study hours.
+   756→-   Familiarity selector for each topic.
+   757→-   Optional rest days and revision buffer.
+   758→-   Generate schedule action.
+   759→
+   760→#### D. Study Plan Dashboard
+   761→
+   762→-   Days remaining.
+   763→-   Estimated and available hours.
+   764→-   Complexity and priority table.
+   765→-   Day-wise schedule.
+   766→-   Gantt chart or timeline.
+   767→-   High-yield warning, where applicable.
+   768→
+   769→#### E. Progress Tracker
+   770→
+   771→-   Mark task complete or pending.
+   772→-   View completed and remaining topics.
+   773→-   View overall progress.
+   774→-   Regenerate the remaining schedule.
+   775→
+   776→### 6.2 Input Interface
+   777→
+   778→The system shall provide clear labels and sensible defaults. Input
+   779→controls shall include: - Dropdowns for subjects and familiarity. - Date
+   780→picker for examination date. - Numeric input for daily study hours and
+   781→topic attributes. - Editable table or form for topic details. - File
+   782→uploader for CSV input.
+   783→
+   784→### 6.3 Output Interface
+   785→
+   786→The system shall provide: - A readable daily schedule. - Topic-level
+   787→estimated hours and priority. - Visual timeline. - Progress summary. -
+   788→Downloadable CSV schedule.
+   789→
+   790→### 6.4 Software Interfaces
+   791→
+   792→  Software           Purpose
+   793→  ------------------ ----------------------------------------
+   794→  Python             Core application and planning logic
+   795→  Streamlit          Web-based user interface
+   796→  pandas             CSV/JSON tabular processing
+   797→  NumPy              Numerical calculations
+   798→  Plotly or Altair   Interactive charts
+   799→  Python datetime    Date and calendar calculations
+   800→  JSON / CSV         Dataset and optional local persistence
+   801→
+   802→------------------------------------------------------------------------
+   803→
+   804→## 7. Non-Functional Requirements
+   805→
+   806→### 7.1 Performance
+   807→
+   808→**NFR-01:** For a typical syllabus containing up to 200 topics, schedule
+   809→generation should normally complete within 3 seconds on a standard
+   810→student laptop, excluding unusually slow file operations.
+   811→
+   812→**NFR-02:** Dashboard interactions should respond without unnecessary
+   813→full-page delays.
+   814→
+   815→**NFR-03:** The application should avoid unnecessary large datasets and
+   816→heavy model dependencies.
+   817→
+   818→### 7.2 Usability
+   819→
+   820→**NFR-04:** A first-time user should be able to create a basic study
+   821→plan without technical assistance.
+   822→
+   823→**NFR-05:** Error messages shall explain the problem and suggest
+   824→corrective action.
+   825→
+   826→**NFR-06:** Complexity and priority scores shall be accompanied by brief
+   827→explanations.
+   828→
+   829→**NFR-07:** Charts shall include readable labels, legends, and tooltips
+   830→where supported.
+   831→
+   832→### 7.3 Reliability
+   833→
+   834→**NFR-08:** The system shall validate input data before running
+   835→calculations.
+   836→
+   837→**NFR-09:** Invalid or incomplete records shall not silently produce
+   838→misleading schedules.
+   839→
+   840→**NFR-10:** The same valid inputs and configuration shall produce the
+   841→same schedule.
+   842→
+   843→**NFR-11:** The application shall handle empty datasets, duplicate topic
+   844→IDs, and missing optional fields safely.
+   845→
+   846→### 7.4 Maintainability
+   847→
+   848→**NFR-12:** UI code, data handling, complexity calculations, and
+   849→scheduling logic should be separated into modules.
+   850→
+   851→**NFR-13:** Weights, multipliers, and thresholds shall be stored as
+   852→configuration values rather than scattered throughout the codebase.
+   853→
+   854→**NFR-14:** The subject dataset shall be editable without changing the
+   855→core scheduling algorithm.
+   856→
+   857→**NFR-15:** Functions responsible for calculations shall be
+   858→independently testable.
+   859→
+   860→### 7.5 Portability
+   861→
+   862→**NFR-16:** The application shall run on supported Windows, Linux, and
+   863→macOS environments with the required Python packages installed.
+   864→
+   865→**NFR-17:** The initial application shall not require GPU hardware.
+   866→
+   867→### 7.6 Security and Privacy
+   868→
+   869→**NFR-18:** The initial version shall not request unnecessary personal
+   870→information.
+   871→
+   872→**NFR-19:** Uploaded CSV files shall be validated before processing.
+   873→
+   874→**NFR-20:** The application shall not execute uploaded file contents as
+   875→code.
+   876→
+   877→**NFR-21:** If plans are stored locally, the application shall explain
+   878→where the data is stored and how it can be reset.
+   879→
+   880→**NFR-22:** If deployed online in a future version, authentication,
+   881→access control, secure storage, and transport security shall be reviewed
+   882→before storing personal student data.
+   883→
+   884→### 7.7 Accessibility
+   885→
+   886→**NFR-23:** Important information shall not be communicated by color
+   887→alone.
+   888→
+   889→**NFR-24:** Labels and chart text shall use readable contrast and sizes.
+   890→
+   891→**NFR-25:** Controls shall have clear labels and understandable
+   892→instructions.
+   893→
+   894→------------------------------------------------------------------------
+   895→
+   896→## 8. Error Handling and Validation
+   897→
+   898→The application shall handle at least the following cases:
+   899→
+   900→  -----------------------------------------------------------------------
+   901→  Condition                           Expected system response
+   902→  ----------------------------------- -----------------------------------
+   903→  Exam date is today or in the past   Show a validation error or request
+   904→                                      a valid future date
+   905→
+   906→  Daily hours are zero or negative    Reject the value
+   907→
+   908→  Daily hours exceed configured       Ask the student to confirm or
+   909→  maximum                             correct the value
+   910→
+   911→  No topics entered                   Do not generate a schedule; request
+   912→                                      syllabus input
+   913→
+   914→  Duplicate topic IDs                 Reject or safely regenerate unique
+   915→                                      IDs
+   916→
+   917→  Missing required CSV column         Display the missing column names
+   918→
+   919→  Invalid rating outside 1--5         Reject the affected record and
+   920→                                      explain the allowed range
+   921→
+   922→  Negative page count or base hours   Reject the invalid value
+   923→
+   924→  Missing optional importance         Apply a documented fallback and
+   925→                                      identify it
+   926→
+   927→  Estimated hours exceed capacity     Activate High-Yield Mode and show a
+   928→                                      warning
+   929→
+   930→  No usable study days remain         Explain that a valid schedule
+   931→                                      cannot be generated
+   932→
+   933→  Corrupt JSON/CSV file               Show a readable import error
+   934→                                      without crashing
+   935→
+   936→  Progress file unavailable           Continue safely where possible and
+   937→                                      explain that progress could not be
+   938→                                      loaded or saved
+   939→  -----------------------------------------------------------------------
+   940→
+   941→------------------------------------------------------------------------
+   942→
+   943→## 9. Suggested Project Structure
+   944→
+   945→The project should use a modular structure similar to the following:
+   946→
+   947→``` text
+   948→smart-study-planner/
+   949→|
+   950→|-- app.py
+   951→|-- requirements.txt
+   952→|-- README.md
+   953→|-- requirements.md
+   954→|
+   955→|-- data/
+   956→|   |-- subjects.json
+   957→|   |-- sample_syllabus.csv
+   958→|
+   959→|-- src/
+   960→|   |-- data_loader.py
+   961→|   |-- validators.py
+   962→|   |-- complexity_engine.py
+   963→|   |-- time_estimator.py
+   964→|   |-- priority_engine.py
+   965→|   |-- scheduler.py
+   966→|   |-- progress_tracker.py
+   967→|   |-- exporter.py
+   968→|
+   969→|-- components/
+   970→|   |-- sidebar.py
+   971→|   |-- syllabus_form.py
+   972→|   |-- dashboard.py
+   973→|   |-- charts.py
+   974→|
+   975→|-- storage/
+   976→|   |-- plans/
+   977→|
+   978→|-- tests/
+   979→    |-- test_validators.py
+   980→    |-- test_complexity_engine.py
+   981→    |-- test_time_estimator.py
+   982→    |-- test_scheduler.py
+   983→    |-- test_progress_tracker.py
+   984→```
+   985→
+   986→This is a proposed organization. The final implementation may simplify
+   987→or adjust the structure while preserving separation of responsibilities.
+   988→
+   989→------------------------------------------------------------------------
+   990→
+   991→## 10. Testing Requirements
+   992→
+   993→### 10.1 Unit Testing
+   994→
+   995→The development team shall test: - Complexity score calculation. -
+   996→Familiarity multipliers. - Preparation-time estimation. - Priority score
+   997→calculation. - Available-day calculation. - Daily workload allocation. -
+   998→High-Yield Mode activation. - Prerequisite handling. - Progress
+   999→percentage calculation. - CSV validation and export.
+  1000→
+  1001→### 10.2 Integration Testing
+  1002→
+  1003→The team shall verify: 1. Subject selection loads the correct topics. 2.
+  1004→CSV upload creates valid topic records. 3. Student inputs reach the
+  1005→planning engine correctly. 4. The planning engine returns a valid
+  1006→schedule. 5. The dashboard displays the generated schedule. 6. Progress
+  1007→updates are reflected in the dashboard. 7. Exported CSV contains the
+  1008→expected schedule fields.
+  1009→
+  1010→### 10.3 System Testing
+  1011→
+  1012→The complete application shall be tested using: - A small syllabus with
+  1013→a few topics. - A large syllabus with many topics. - A short preparation
+  1014→period. - A long preparation period. - Topics with different familiarity
+  1015→levels. - Missing and invalid data. - A case where all topics fit within
+  1016→available time. - A case where High-Yield Mode is required.
+  1017→
+  1018→### 10.4 User Acceptance Testing
+  1019→
+  1020→A student tester should be able to: 1. Open the application. 2. Select a
+  1021→subject. 3. review or edit its topics. 4. Enter an examination date. 5.
+  1022→Enter daily available study hours. 6. Set familiarity levels. 7.
+  1023→Generate a schedule. 8. Understand topic priorities and estimated hours.
+  1024→9. Mark a topic as completed. 10. Download the study plan.
+  1025→
+  1026→The application is acceptable when these tasks can be completed without
+  1027→developer intervention and the resulting schedule follows the validation
+  1028→and capacity rules.
+  1029→
+  1030→------------------------------------------------------------------------
+  1031→
+  1032→## 11. Acceptance Criteria
+  1033→
+  1034→The project shall be considered ready for demonstration when:
+  1035→
+  1036→-   [ ] The application starts successfully using the documented run
+  1037→    command.
+  1038→-   [ ] At least one predefined subject and its topics are available.
+  1039→-   [ ] A student can add a custom topic or import a valid CSV.
+  1040→-   [ ] Invalid input is rejected with a useful message.
+  1041→-   [ ] Every valid topic receives a complexity score.
+  1042→-   [ ] Familiarity changes the estimated preparation time.
+  1043→-   [ ] The system calculates days and hours available before the exam.
+  1044→-   [ ] A day-wise schedule is generated.
+  1045→-   [ ] Daily allocations do not exceed configured capacity.
+  1046→-   [ ] High-Yield Mode activates when the total estimated effort
+  1047→    exceeds available time.
+  1048→-   [ ] Unscheduled or shortened topics are clearly identified.
+  1049→-   [ ] The timeline or Gantt chart displays the schedule.
+  1050→-   [ ] The student can mark tasks as completed.
+  1051→-   [ ] Progress is reflected in the dashboard.
+  1052→-   [ ] The schedule can be downloaded as a CSV file.
+  1053→-   [ ] The application handles invalid files and empty inputs without
+  1054→    crashing.
+  1055→-   [ ] The project documentation explains the algorithm and its
+  1056→    assumptions.
+  1057→
+  1058→------------------------------------------------------------------------
+  1059→
+  1060→## 12. Constraints and Limitations
+  1061→
+  1062→1.  Topic complexity is estimated from manually assigned attributes and
+  1063→    is not an objective measurement of a student's ability.
+  1064→2.  Familiarity is self-reported and may be inaccurate.
+  1065→3.  Historical difficulty ratings may be approximate unless supported by
+  1066→    reliable student-performance data.
+  1067→4.  Preparation-time estimates are guidance values and may differ from
+  1068→    actual study time.
+  1069→5.  The initial version uses a rule-based model. It should not be
+  1070→    described as a trained machine-learning model unless training data,
+  1071→    model evaluation, and a genuine training process are implemented.
+  1072→6.  High-Yield Mode helps prioritize limited time but cannot guarantee
+  1073→    complete syllabus coverage or examination success.
+  1074→7.  Automatic syllabus extraction and external syllabus synchronization
+  1075→    are not part of the initial release.
+  1076→8.  The quality of the schedule depends on the quality of the supplied
+  1077→    topic data and student inputs.
+  1078→
+  1079→------------------------------------------------------------------------
+  1080→
+  1081→## 13. Future Enhancements
+  1082→
+  1083→Possible future versions may include:
+  1084→
+  1085→-   PDF syllabus parsing and topic extraction.
+  1086→-   Natural-language processing to identify chapters and subtopics.
+  1087→-   A trained regression model using collected, consented study-time
+  1088→    data.
+  1089→-   Personalized estimates learned from a student's completed study
+  1090→    sessions.
+  1091→-   Spaced-repetition revision scheduling.
+  1092→-   Practice-question and mock-test planning.
+  1093→-   Calendar export and reminders.
+  1094→-   Multiple examination plans.
+  1095→-   Cloud synchronization and secure user accounts.
+  1096→-   Mobile-friendly progressive web application.
+  1097→-   Weekly performance reports.
+  1098→-   Automatic rescheduling after missed study sessions.
+  1099→-   Optional integration with educational platforms.
+  1100→
+  1101→Any machine-learning enhancement should be evaluated using appropriate
+  1102→training/test separation and error metrics, and should be compared with
+  1103→the simpler rule-based baseline.
+  1104→
+  1105→------------------------------------------------------------------------
+  1106→
+  1107→## 14. Deployment and Execution Requirements
+  1108→
+  1109→### 14.1 Installation
+  1110→
+  1111→The developer shall provide a `requirements.txt` file listing compatible
+  1112→versions of the required packages. A typical environment will include:
+  1113→
+  1114→-   streamlit
+  1115→-   pandas
+  1116→-   numpy
+  1117→-   plotly (or altair)
+  1118→-   pytest (for testing)
+  1119→
+  1120→### 14.2 Run Command
+  1121→
+  1122→From the project root directory, the user should be able to start the
+  1123→application with:
+  1124→
+  1125→``` bash
+  1126→streamlit run app.py
+  1127→```
+  1128→
+  1129→### 14.3 Deployment Notes
+  1130→
+  1131→The initial release may run locally. If hosted, the deployment
+  1132→environment must support the selected Python version and dependencies.
+  1133→Persistent storage must be configured if user plans are expected to
+  1134→survive application restarts on the hosting platform.
+  1135→
+  1136→------------------------------------------------------------------------
+  1137→
+  1138→## 15. Project Deliverables
+  1139→
+  1140→The project submission should contain:
+  1141→
+  1142→1.  `requirements.md` --- this Software Requirements Specification.
+  1143→2.  `README.md` --- project overview, setup, and execution instructions.
+  1144→3.  `requirements.txt` --- Python dependencies.
+  1145→4.  Python source files for the Streamlit application and planning
+  1146→    engine.
+  1147→5.  JSON or CSV subject and syllabus dataset.
+  1148→6.  Test files and sample test data.
+  1149→7.  Screenshots of the dashboard, generated schedule, and progress
+  1150→    tracker.
+  1151→8.  A short project report describing the problem, architecture,
+  1152→    algorithm, testing, limitations, and future scope.
+  1153→9.  A demonstration dataset suitable for the project evaluation.
+  1154→
+  1155→------------------------------------------------------------------------
+  1156→
+  1157→## 16. Conclusion
+  1158→
+  1159→The AI-Powered Smart Study Planner & Syllabus Breakdown Tool is a
+  1160→practical academic project that applies data processing, rule-based
+  1161→analytics, scheduling algorithms, and interactive visualization to a
+  1162→common student problem. It transforms syllabus information and personal
+  1163→study availability into an understandable study plan.
+  1164→
+  1165→The first version should focus on correctness, transparency, usability,
+  1166→and reliable schedule generation. A clear rule-based engine provides a
+  1167→manageable and explainable foundation for a 5th-semester project. More
+  1168→advanced machine-learning and syllabus-extraction features can be
+  1169→introduced after the core application has been tested successfully.
+  1170→

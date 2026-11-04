@@ -1,0 +1,802 @@
+     1→# Software Engineering Analysis & Project Planning
+     2→
+     3→## AI-Powered Smart Study Planner & Syllabus Breakdown Tool
+     4→
+     5→
+     6→
+     7→5th Semester Academic Project
+     8→
+     9→Software Engineering & Project Architecture
+    10→
+    11→
+    12→
+    13→This analysis is based on your previously prepared `requirements.md` (Software Requirements Specification). It covers the SDLC model, functional and non-functional requirements, and project cost estimation using the Basic COCOMO model.
+    14→
+    15→The recommended development approach is Agile SDLC with iterative prototyping, because your application contains multiple independent modules, such as syllabus management, complexity calculation, scheduling, visualization, and progress tracking.
+    16→
+    17→# 1. Software Development Life Cycle (SDLC) Model Selection
+    18→
+    19→## 1.1 Introduction
+    20→
+    21→The Software Development Life Cycle (SDLC) is a systematic process used to develop software applications. It defines different phases, including requirement analysis, system design, implementation, testing, deployment, and maintenance.
+    22→
+    23→Different SDLC models follow different approaches to software development. Selecting an appropriate model helps ensure that the project is completed within the available time, budget, and resources.
+    24→
+    25→For the AI-Powered Smart Study Planner, five standard SDLC models are evaluated below.
+    26→
+    27→## 1.2 Evaluation of Different SDLC Models
+    28→
+    29→### A. Waterfall Model
+    30→
+    31→[SDLC (Software Development Life Cycle) Phases, Process, Models - Complete guide - scmGalaxy](https://images.openai.com/static-rsc-4/0TvU0_DAm_Pk_fI4Q2ov-tuAPJrOCtEDk8tMWFVI_zGdsG_gopP2G5hHV04pH96K-qX4FkftM5iU-skHA1jIJLZuZCjOksnW90H0m5--OgAiNVmM4uIFIITzuUSmBxgoLCCBa4-UmL9-dtpfavqyhWollOveSBr4EfcFDNPbrZ0?purpose=inline)
+    32→
+    33→[scmgalaxy.com](https://www.scmgalaxy.com/tutorials/sdlc-software-development-life-cycle-phases-process-models-complete-guide/?utm_source=chatgpt.com)
+    34→
+    35→The Waterfall Model is a traditional software development model in which development progresses through a sequence of predefined phases.
+    36→
+    37→Phases:
+    38→
+    39→1. Requirement Analysis
+    40→2. System Design
+    41→3. Implementation
+    42→4. Testing
+    43→5. Deployment
+    44→6. Maintenance
+    45→
+    46→Advantages:
+    47→
+    48→- Simple and easy to understand.
+    49→- Clearly defined development phases.
+    50→- Proper documentation at every stage.
+    51→- Suitable when requirements are fixed.
+    52→
+    53→Disadvantages:
+    54→
+    55→- Changes in requirements are difficult to accommodate.
+    56→- Working software is available relatively late.
+    57→- Testing generally occurs after implementation.
+    58→- Less suitable for applications requiring frequent modifications.
+    59→
+    60→Suitability for this project: Moderate. The project has a defined SRS, but the complexity formula, scheduling algorithm, and dashboard may require changes during development.
+    61→
+    62→### B. Prototype Model
+    63→
+    64→[Prototype Model in Software Engineering | Board Infinity](https://images.openai.com/static-rsc-4/1RbrLFHJi_gljOwwV9A3BoXOCssTVeKR_Y_-Op7p7gfjcZ5IrHn76cm8LzvLWYXTW4JmJAaN4UzVXJly67g67pM4Gjwh1xwTrtnDB3BvaNgm85_O9oGgxgVnflMTrXKrR9GhsTfvmgS-6IG3sOackPbZDsdAhvBUe2pJUufhpzg?purpose=inline)
+    65→
+    66→[boardinfinity.com](https://www.boardinfinity.com/blog/a-quick-guide-to-prototype-model-in-software-engineering/?utm_source=chatgpt.com)
+    67→
+    68→The Prototype Model involves creating an initial working version of the application to understand user requirements. Feedback is collected, and the prototype is improved until the expected functionality is achieved.
+    69→
+    70→Phases:
+    71→
+    72→1. Initial Requirement Collection
+    73→2. Quick Design
+    74→3. Prototype Development
+    75→4. User Evaluation
+    76→5. Refinement
+    77→6. Final Implementation
+    78→
+    79→Advantages:
+    80→
+    81→- Provides an early working version.
+    82→- Helps understand user expectations.
+    83→- Allows frequent feedback.
+    84→- Improves interface design and usability.
+    85→
+    86→Disadvantages:
+    87→
+    88→- Frequent changes may increase development time.
+    89→- Developers may focus more on appearance than system architecture.
+    90→- The prototype may become difficult to maintain if not redesigned properly.
+    91→
+    92→Suitability for this project: High. A Streamlit prototype can quickly demonstrate syllabus input, topic difficulty scores, and a sample study schedule.
+    93→
+    94→### C. Incremental Model
+    95→
+    96→[Incremental Model of Software Development Life Cycle – Custom Web & Mobile Development Company – New Line Technologies](https://images.openai.com/static-rsc-4/T9ZyTavqU6EUy01fbrNYC9OTlEY9oLCSLDRBfek2jbcbHYS8Qdx2I8Pyevl71Abzkx_VrvNI9taBOskWiqsRoP_kibR-7E9teQM2ZPDn-owy2S1w-ncdpIkW2ctXGM7r1ZMUx9nnMT_VeCZ828c_b5HE0BrTlLjmXPupwYLopEc?purpose=inline)
+    97→
+    98→[newline.tech](https://newline.tech/incremental-model-of-software-development-life-cycle/?utm_source=chatgpt.com)
+    99→
+   100→The Incremental Model develops software in small functional modules called increments. Each increment adds new features to the existing application.
+   101→
+   102→Possible increments for this project:
+   103→
+   104→1. Increment 1: Subject selection and syllabus input.
+   105→2. Increment 2: Complexity score calculation.
+   106→3. Increment 3: Preparation-time estimation.
+   107→4. Increment 4: Automated study schedule generation.
+   108→5. Increment 5: Dashboard, progress tracking, and CSV export.
+   109→
+   110→Advantages:
+   111→
+   112→- Working software is delivered in stages.
+   113→- Easier testing and debugging.
+   114→- New features can be added gradually.
+   115→- Reduces the risk of developing the entire application at once.
+   116→
+   117→Disadvantages:
+   118→
+   119→- Requires proper module planning.
+   120→- Integration between modules can become challenging.
+   121→- Overall architecture must be designed carefully.
+   122→
+   123→Suitability for this project: Very high. The application can be developed and tested module by module.
+   124→
+   125→### D. Spiral Model
+   126→
+   127→[Software Development Life Cycle (SDLC) | ITAIMS Insights](https://images.openai.com/static-rsc-4/PA3GgpXje-gAq2WiZtofyGv1be4e6D_NnCFMWmQxBuf1CUm7UAWylq4iOOP71wNRaQVSsVSVCM8Apmm9q6acc52GyVoYVQQSRthNRc_YlAGN0KLONL1qx99YCZCF-eLu7Qjq2b2dlK-P9x61buwFjSDqzTTNwdNP2QSfuKty8ew?purpose=inline)
+   128→
+   129→[itaims.com](https://www.itaims.com/blog/software-development-life-cycle?utm_source=chatgpt.com)
+   130→
+   131→The Spiral Model combines iterative development with systematic risk analysis. Development takes place through repeated cycles called spirals.
+   132→
+   133→Each spiral includes:
+   134→
+   135→1. Planning
+   136→2. Risk Analysis
+   137→3. Engineering and Development
+   138→4. Customer Evaluation
+   139→
+   140→Advantages:
+   141→
+   142→- Strong risk management.
+   143→- Supports changing requirements.
+   144→- Suitable for large and complex projects.
+   145→- Continuous evaluation is possible.
+   146→
+   147→Disadvantages:
+   148→
+   149→- Expensive and time-consuming.
+   150→- Requires risk-analysis expertise.
+   151→- More complicated than necessary for small projects.
+   152→
+   153→Suitability for this project: Low to moderate. The project does not involve major financial, security, or technical risks that justify the overhead of the Spiral Model.
+   154→
+   155→### E. Agile Model
+   156→
+   157→[A Guide to Getting the Most Out of Agile | Onward Developer Toolkit](https://images.openai.com/static-rsc-4/38giqxNaR4Ph_DFB3bKg-OS_sMMB4JLEVFCnTpmkoL5wuKgbQIKKDVs7S6ljiwmv-GGg1akOqipi251Nh1XkhNfYpEwjRbFPL6I29Sp-KokSHjtgeejrhX71GfzhSAs-WcRjYQp0BcfoZN59d56ba9C92JUxJ1cHXiar1hr1ODg?purpose=inline)
+   158→
+   159→[developers.onwardplatforms.com](https://developers.onwardplatforms.com/blog/2022/08/18/guide-to-getting-most-out-of-agile?utm_source=chatgpt.com)
+   160→
+   161→The Agile Model is an iterative and flexible software development approach in which an application is developed through short cycles called sprints.
+   162→
+   163→Each sprint includes planning, development, testing, review, and improvement.
+   164→
+   165→Advantages:
+   166→
+   167→- Supports changing requirements.
+   168→- Continuous testing and feedback.
+   169→- Working software is developed early.
+   170→- Easier identification of errors.
+   171→- Features can be developed in small iterations.
+   172→- Encourages teamwork and collaboration.
+   173→
+   174→Disadvantages:
+   175→
+   176→- Requires regular communication.
+   177→- Frequent changes can affect deadlines.
+   178→- Documentation may be neglected if not planned properly.
+   179→- Requires continuous monitoring of project progress.
+   180→
+   181→Suitability for this project: Very high. The application can be developed through small sprints, with each sprint delivering a working feature.
+   182→
+   183→## 1.3 Comparison of SDLC Models
+   184→
+   185→| SDLC Model  | Flexibility | Testing approach           | Suitability |
+   186→| ----------- | ----------- | -------------------------- | ----------- |
+   187→| Waterfall   | Low         | Mainly after development   | Moderate    |
+   188→| Prototype   | High        | Repeated prototype testing | High        |
+   189→| Incremental | High        | At each increment          | Very high   |
+   190→| Spiral      | Very high   | At each cycle              | Moderate    |
+   191→| Agile       | Very high   | Continuous testing         | Very high   |
+   192→
+   193→## 1.4 Recommended SDLC Model: Agile
+   194→
+   195→Recommended
+   196→
+   197→Agile is the most suitable SDLC model for developing the AI-Powered Smart Study Planner because the application consists of several independent features that can be implemented and tested incrementally.
+   198→
+   199→The project involves Python, Streamlit, pandas, NumPy, and Plotly. Each component can be developed separately and integrated into the application through short development iterations.
+   200→
+   201→Reasons for selecting Agile:
+   202→
+   203→1. Flexible Development: Changes in complexity calculations and scheduling logic can be implemented easily.
+   204→2. Early Working Prototype: A basic Streamlit dashboard can be developed during the initial sprint.
+   205→3. Continuous Testing: Every module can be tested immediately after implementation.
+   206→4. Modular Development: Syllabus management, analytics, scheduling, and progress tracking can be developed independently.
+   207→5. User Feedback: Students and project evaluators can review the application and suggest improvements.
+   208→6. Reduced Development Risk: Problems can be identified and corrected during each sprint.
+   209→
+   210→### 1.5 Proposed Agile Sprint Plan
+   211→
+   212→| Sprint   | Duration | Development activities                             | Deliverable                |
+   213→| -------- | -------- | -------------------------------------------------- | -------------------------- |
+   214→| Sprint 1 | Week 1   | Requirement analysis, project setup, UI design     | Basic Streamlit interface  |
+   215→| Sprint 2 | Week 2   | Subject selection, custom syllabus, CSV upload     | Syllabus management module |
+   216→| Sprint 3 | Week 3   | Complexity score and familiarity calculations      | Analytics engine           |
+   217→| Sprint 4 | Week 4   | Time estimation and scheduling algorithm           | Automated study planner    |
+   218→| Sprint 5 | Week 5   | High-Yield Mode and Gantt chart                    | Interactive dashboard      |
+   219→| Sprint 6 | Week 6   | Progress tracking, CSV export, integration testing | Complete application       |
+   220→| Sprint 7 | Week 7   | System testing, bug fixing, documentation          | Final project release      |
+   221→
+   222→The proposed timeline assumes a small student team with approximately seven weeks of focused development.
+   223→
+   224→Conclusion: Agile is recommended as the primary SDLC model, supported by incremental feature delivery and early prototyping. It provides flexibility, continuous testing, and faster delivery of working software.
+   225→
+   226→# 2. Functional and Non-Functional Requirements Summary
+   227→
+   228→## 2.1 Introduction
+   229→
+   230→Software requirements describe what a system should do and how it should perform.
+   231→
+   232→Requirements are mainly divided into two categories:
+   233→
+   234→1. Functional Requirements: Define the operations and services provided by the application.
+   235→2. Non-Functional Requirements: Define the quality, performance, reliability, and usability standards of the application.
+   236→
+   237→The following requirements are derived from the project's SRS document.&#x20;
+   238→
+   239→requirements.md
+   240→
+   241→
+   242→
+   243→## 2.2 Functional Requirements (FR)
+   244→
+   245→Functional requirements describe the core features and operations of the Smart Study Planner.
+   246→
+   247→### FR-01: Syllabus Input and Management
+   248→
+   249→The system shall allow students to provide syllabus information through three methods:
+   250→
+   251→- Predefined Subjects: Select subjects such as Data Structures, Operating Systems, DBMS, and Computer Networks.
+   252→- Custom Syllabus: Manually enter subject names, chapters, and topics.
+   253→- CSV Upload: Upload a CSV file containing chapter details and difficulty-related attributes.
+   254→
+   255→The system shall also allow students to add, edit, and delete topics.
+   256→
+   257→### FR-02: Student Input Management
+   258→
+   259→The system shall collect the following information:
+   260→
+   261→- Examination date.
+   262→- Daily available study hours.
+   263→- Topic familiarity level.
+   264→- Topic mathematical density.
+   265→- Conceptual depth.
+   266→- Historical difficulty.
+   267→- Topic importance or syllabus weightage.
+   268→
+   269→The system shall validate the entered information before generating the study plan.
+   270→
+   271→### FR-03: Topic Complexity Score Calculation
+   272→
+   273→The system shall calculate the difficulty level of each topic using a weighted mathematical formula.
+   274→
+   275→\\[ CS_i=(W_1 \times M_i)+(W_2 \times C_i)+(W_3 \times H_i) \\]
+   276→
+   277→Where:
+   278→
+   279→- \\(M_i\\) = Mathematical Density.
+   280→- \\(C_i\\) = Conceptual Depth.
+   281→- \\(H_i\\) = Historical Difficulty.
+   282→- \\(W_1,W_2,W_3\\) = Assigned weights.
+   283→
+   284→The normalized score shall be calculated as:
+   285→
+   286→\\[ CS\_{normalized}=\frac{CS_i-1}{4}\times100 \\]
+   287→
+   288→Suggested difficulty categories:
+   289→
+   290→| Score  | Difficulty |
+   291→| ------ | ---------- |
+   292→| 0–33   | Low        |
+   293→| 34–66  | Medium     |
+   294→| 67–100 | High       |
+   295→
+   296→### FR-04: Familiarity-Based Time Estimation
+   297→
+   298→The system shall adjust preparation time according to the student's existing knowledge.
+   299→
+   300→| Familiarity Level   | Time Multiplier |
+   301→| ------------------- | --------------- |
+   302→| Completely New      | 1.50            |
+   303→| Basic Understanding | 1.20            |
+   304→| Familiar            | 1.00            |
+   305→| Revised Before      | 0.75            |
+   306→
+   307→The estimated preparation time shall be:
+   308→
+   309→\\[ ET_i=BH_i\times CF_i\times FM_i \\]
+   310→
+   311→Where:
+   312→
+   313→- \\(ET_i\\) = Estimated Time.
+   314→- \\(BH_i\\) = Baseline Hours.
+   315→- \\(CF_i\\) = Complexity Factor.
+   316→- \\(FM_i\\) = Familiarity Multiplier.
+   317→
+   318→This ensures that a completely new topic receives more preparation time than a previously revised topic.
+   319→
+   320→### FR-05: Automated Day-by-Day Study Scheduling
+   321→
+   322→The system shall automatically generate a study timetable based on:
+   323→
+   324→- Examination date.
+   325→- Available preparation days.
+   326→- Daily study hours.
+   327→- Estimated preparation time.
+   328→- Topic complexity.
+   329→- Topic priority.
+   330→
+   331→The system shall distribute topics across available days without exceeding the student's daily study-hour limit.
+   332→
+   333→Example:
+   334→
+   335→| Day   | Topic             | Study Hours |
+   336→| ----- | ----------------- | ----------- |
+   337→| Day 1 | Arrays            | 2           |
+   338→| Day 2 | Linked Lists      | 2.5         |
+   339→| Day 3 | Stacks and Queues | 2           |
+   340→| Day 4 | Trees             | 3           |
+   341→| Day 5 | Graphs            | 2.5         |
+   342→
+   343→Illustrative schedule only.
+   344→
+   345→### FR-06: High-Yield Mode
+   346→
+   347→The system shall automatically activate High-Yield Mode when:
+   348→
+   349→\\[ TotalEstimatedHours>AvailableHours \\]
+   350→
+   351→In this mode:
+   352→
+   353→- High-priority topics receive preference.
+   354→- Important chapters are scheduled first.
+   355→- Available study hours are distributed according to topic priority.
+   356→- Shortened or unscheduled topics are identified.
+   357→- The system displays a warning about insufficient preparation time.
+   358→
+   359→This feature helps students prioritize important topics when the examination is approaching.
+   360→
+   361→### FR-07: Interactive Dashboard and Visualization
+   362→
+   363→The system shall provide a Streamlit dashboard displaying:
+   364→
+   365→- Selected subject and examination date.
+   366→- Remaining preparation days.
+   367→- Total estimated study hours.
+   368→- Available study hours.
+   369→- Topic complexity scores.
+   370→- Topic priority levels.
+   371→- Day-wise study timetable.
+   372→- Interactive Gantt chart or timeline.
+   373→
+   374→### FR-08: Progress Tracking
+   375→
+   376→The system shall allow students to:
+   377→
+   378→- Mark topics as completed.
+   379→- View pending topics.
+   380→- Monitor overall study progress.
+   381→- Update completion status.
+   382→- Regenerate the remaining schedule when necessary.
+   383→
+   384→Progress can be represented using a progress bar or graphical chart.
+   385→
+   386→### FR-09: CSV Export
+   387→
+   388→The system shall allow students to download the generated study schedule in CSV format.
+   389→
+   390→The exported file should contain:
+   391→
+   392→- Study date.
+   393→- Topic name.
+   394→- Estimated study hours.
+   395→- Priority level.
+   396→- Completion status.
+   397→
+   398→### FR-10: Data Persistence
+   399→
+   400→The system should preserve study plans and progress using local JSON or CSV storage so that information can be recovered between application sessions.
+   401→
+   402→## 2.3 Functional Requirements Summary
+   403→
+   404→| ID    | Functional Requirement                     | Priority |
+   405→| ----- | ------------------------------------------ | -------- |
+   406→| FR-01 | Predefined, custom, and CSV syllabus input | High     |
+   407→| FR-02 | Student input management                   | High     |
+   408→| FR-03 | Complexity score calculation               | High     |
+   409→| FR-04 | Familiarity-based time estimation          | High     |
+   410→| FR-05 | Automated study scheduling                 | High     |
+   411→| FR-06 | High-Yield Mode                            | High     |
+   412→| FR-07 | Interactive dashboard                      | High     |
+   413→| FR-08 | Progress tracking                          | High     |
+   414→| FR-09 | CSV export                                 | Medium   |
+   415→| FR-10 | Local data persistence                     | High     |
+   416→
+   417→## 2.4 Non-Functional Requirements (NFR)
+   418→
+   419→Non-functional requirements describe the quality attributes and operational standards that the application must satisfy.
+   420→
+   421→### NFR-01: Performance
+   422→
+   423→The application should generate a study plan for a typical syllabus containing up to 200 topics within approximately 3 seconds on a standard student laptop.
+   424→
+   425→Other performance expectations:
+   426→
+   427→- Dashboard interactions should respond quickly.
+   428→- CSV files should be processed without unnecessary delays.
+   429→- Complexity calculations should be computationally lightweight.
+   430→
+   431→### NFR-02: Usability
+   432→
+   433→The application should provide a simple and user-friendly interface.
+   434→
+   435→- Students should be able to create a study plan without programming knowledge.
+   436→- Input fields should have clear labels.
+   437→- Error messages should be understandable.
+   438→- Charts should display readable labels and legends.
+   439→- The dashboard should be easy to navigate.
+   440→
+   441→### NFR-03: Reliability
+   442→
+   443→The system should generate accurate and consistent results for valid inputs.
+   444→
+   445→- Invalid inputs must be rejected.
+   446→- Missing syllabus information should be handled safely.
+   447→- The same inputs should produce the same schedule.
+   448→- The system should handle corrupted CSV or JSON files without crashing.
+   449→- Daily study-hour limits must not be exceeded.
+   450→
+   451→### NFR-04: Maintainability
+   452→
+   453→The application should have a modular architecture.
+   454→
+   455→Different modules should be maintained independently, such as:
+   456→
+   457→- `data_loader.py`
+   458→- `complexity_engine.py`
+   459→- `time_estimator.py`
+   460→- `scheduler.py`
+   461→- `progress_tracker.py`
+   462→- `exporter.py`
+   463→
+   464→This makes debugging, testing, and future development easier.
+   465→
+   466→### NFR-05: Portability
+   467→
+   468→The application should run on:
+   469→
+   470→- Windows 10/11.
+   471→- Linux.
+   472→- macOS.
+   473→
+   474→It should use Python and lightweight libraries without requiring expensive hardware or GPU support.
+   475→
+   476→### NFR-06: Data Persistence
+   477→
+   478→The system should store student study plans and progress using local JSON or CSV files.
+   479→
+   480→The stored information should be available when the application is reopened, provided the local storage remains available.
+   481→
+   482→### NFR-07: Security
+   483→
+   484→- Uploaded CSV files must be validated.
+   485→- The application must not execute uploaded file contents as code.
+   486→- Unnecessary personal information should not be collected.
+   487→- Stored data should have clearly documented locations and reset options.
+   488→
+   489→### NFR-08: Accessibility
+   490→
+   491→- Text should be readable.
+   492→- Charts should use clear labels.
+   493→- Important information should not depend on color alone.
+   494→- Controls should have understandable names and instructions.
+   495→
+   496→requirements.md
+   497→
+   498→## 2.5 Non-Functional Requirements Summary
+   499→
+   500→| ID     | Requirement      | Expected Standard                                     |
+   501→| ------ | ---------------- | ----------------------------------------------------- |
+   502→| NFR-01 | Performance      | Plan generation within 3 seconds for up to 200 topics |
+   503→| NFR-02 | Usability        | Simple Streamlit interface                            |
+   504→| NFR-03 | Reliability      | Consistent results and safe error handling            |
+   505→| NFR-04 | Maintainability  | Modular Python architecture                           |
+   506→| NFR-05 | Portability      | Windows, Linux, and macOS                             |
+   507→| NFR-06 | Data Persistence | Local JSON/CSV storage                                |
+   508→| NFR-07 | Security         | Input validation and safe file handling               |
+   509→| NFR-08 | Accessibility    | Readable text, labels, and charts                     |
+   510→
+   511→Conclusion: Functional requirements define the application's main operations, such as syllabus management, difficulty calculation, schedule generation, and progress tracking. Non-functional requirements ensure that the application remains fast, reliable, maintainable, secure, and user-friendly.
+   512→
+   513→# 3. COCOMO Model Estimation (Team Size & Effort)
+   514→
+   515→## 3.1 Introduction to COCOMO
+   516→
+   517→COCOMO stands for Constructive Cost Model. It is a software cost estimation model developed by Barry W. Boehm.
+   518→
+   519→It is used to estimate:
+   520→
+   521→- Software development effort.
+   522→- Development time.
+   523→- Average team size.
+   524→- Overall project cost.
+   525→
+   526→COCOMO estimates software development effort based on the size of the software, measured in KLOC (Thousands of Lines of Code).
+   527→
+   528→For this project, we will use the Basic COCOMO Model – Organic Mode.
+   529→
+   530→## 3.2 Why Organic Mode?
+   531→
+   532→The Organic Mode is suitable for small and relatively simple software projects developed by a small team with reasonable experience.
+   533→
+   534→Our Smart Study Planner project qualifies because:
+   535→
+   536→1. It is a relatively small academic application.
+   537→2. It uses standard technologies such as Python and Streamlit.
+   538→3. It has a modular architecture.
+   539→4. It does not require complex hardware.
+   540→5. It uses lightweight data processing and rule-based algorithms.
+   541→6. Its development is manageable by a small student team.
+   542→
+   543→Therefore, Organic Mode is appropriate for this estimation.
+   544→
+   545→## 3.3 Basic COCOMO Formulas (Organic Mode)
+   546→
+   547→The following formulas are used:
+   548→
+   549→1\. Effort Estimation
+   550→
+   551→\\[ E=2.4\times(KLOC)^{1.05} \\]
+   552→
+   553→Where:
+   554→
+   555→- E = Development effort in Person-Months.
+   556→- KLOC = Thousands of Source Lines of Code.
+   557→
+   558→2\. Development Time
+   559→
+   560→\\[ TDEV=2.5\times(E)^{0.38} \\]
+   561→
+   562→Where:
+   563→
+   564→- TDEV = Development time in months.
+   565→- E = Estimated effort in Person-Months.
+   566→
+   567→3\. Average Team Size
+   568→
+   569→\\[ TeamSize=\frac{E}{TDEV} \\]
+   570→
+   571→Where:
+   572→
+   573→- E = Total development effort.
+   574→- TDEV = Development duration.
+   575→
+   576→## 3.4 Project Size Estimation
+   577→
+   578→For this academic project, we assume the following source code sizes:
+   579→
+   580→| Project Size | Source Lines of Code | KLOC |
+   581→| ------------ | -------------------- | ---- |
+   582→| Small        | 2,000                | 2    |
+   583→| Medium       | 3,500                | 3.5  |
+   584→| Large        | 5,000                | 5    |
+   585→
+   586→These are estimated implementation sizes, not measured source-code counts. They exclude blank lines and comments.
+   587→
+   588→## 3.5 COCOMO Calculation
+   589→
+   590→We will calculate the effort, development time, and average team size for all three project sizes.
+   591→
+   592→### Case 1: Small Project (2,000 SLOC)
+   593→
+   594→Given:
+   595→
+   596→\\[ KLOC=2 \\]
+   597→
+   598→Effort:
+   599→
+   600→\\[ E=2.4\times(2)^{1.05} \\]
+   601→
+   602→\\[ E=2.4\times2.071 \\]
+   603→
+   604→\\[ \boxed{E=4.97\ Person\text{-}Months} \\]
+   605→
+   606→Development Time:
+   607→
+   608→\\[ TDEV=2.5\times(4.97)^{0.38} \\]
+   609→
+   610→\\[ \boxed{TDEV\approx4.61\ Months} \\]
+   611→
+   612→Average Team Size:
+   613→
+   614→\\[ TeamSize=\frac{4.97}{4.61} \\]
+   615→
+   616→\\[ \boxed{TeamSize\approx1.08} \\]
+   617→
+   618→Therefore, approximately 1–2 developers are required on average.
+   619→
+   620→### Case 2: Medium Project (3,500 SLOC)
+   621→
+   622→Given:
+   623→
+   624→\\[ KLOC=3.5 \\]
+   625→
+   626→Effort:
+   627→
+   628→\\[ E=2.4\times(3.5)^{1.05} \\]
+   629→
+   630→\\[ \boxed{E\approx8.94\ Person\text{-}Months} \\]
+   631→
+   632→Development Time:
+   633→
+   634→\\[ TDEV=2.5\times(8.94)^{0.38} \\]
+   635→
+   636→\\[ \boxed{TDEV\approx5.75\ Months} \\]
+   637→
+   638→Average Team Size:
+   639→
+   640→\\[ TeamSize=\frac{8.94}{5.75} \\]
+   641→
+   642→\\[ \boxed{TeamSize\approx1.56} \\]
+   643→
+   644→Therefore, approximately 2 developers are required on average.
+   645→
+   646→### Case 3: Large Project (5,000 SLOC)
+   647→
+   648→Given:
+   649→
+   650→\\[ KLOC=5 \\]
+   651→
+   652→Effort:
+   653→
+   654→\\[ E=2.4\times(5)^{1.05} \\]
+   655→
+   656→\\[ \boxed{E\approx13.00\ Person\text{-}Months} \\]
+   657→
+   658→Development Time:
+   659→
+   660→\\[ TDEV=2.5\times(13.00)^{0.38} \\]
+   661→
+   662→\\[ \boxed{TDEV\approx6.63\ Months} \\]
+   663→
+   664→Average Team Size:
+   665→
+   666→\\[ TeamSize=\frac{13.00}{6.63} \\]
+   667→
+   668→\\[ \boxed{TeamSize\approx1.96} \\]
+   669→
+   670→Therefore, approximately 2 developers are required on average.
+   671→
+   672→## 3.6 COCOMO Estimation Summary
+   673→
+   674→Results calculated using Basic COCOMO Organic Mode formulas.
+   675→
+   676→| Project Size | KLOC | Effort (PM) | Time (Months) | Avg. Team |
+   677→| ------------ | ---- | ----------- | ------------- | --------- |
+   678→| Small        | 2    | 4.97        | 4.61          | 1.08      |
+   679→| Medium       | 3.5  | 8.94        | 5.75          | 1.56      |
+   680→| Large        | 5    | 13.00       | 6.63          | 1.96      |
+   681→
+   682→Estimated Development Effort
+   683→
+   684→Basic COCOMO Organic Mode estimates in person-months.
+   685→
+   686→0 PM4 PM8 PM12 PM16 PM2 KLOC3.5 KLOC5 KLOC
+   687→
+   688→## 3.7 Recommended Team Size
+   689→
+   690→For the Smart Study Planner project, a team of 2–3 members is recommended.
+   691→
+   692→A practical division of responsibilities is:
+   693→
+   694→| Team Member | Responsibility           | Main Tasks                                                            |
+   695→| ----------- | ------------------------ | --------------------------------------------------------------------- |
+   696→| Member 1    | Backend Developer        | Complexity engine, time estimation, scheduling algorithm              |
+   697→| Member 2    | Frontend Developer       | Streamlit dashboard, forms, charts, user interface                    |
+   698→| Member 3    | Data & Testing Developer | Dataset management, CSV handling, testing, integration, documentation |
+   699→
+   700→### Why 2–3 Members?
+   701→
+   702→1. Development work can be divided into independent modules.
+   703→2. Backend and frontend development can happen simultaneously.
+   704→3. Testing can be performed alongside implementation.
+   705→4. Integration becomes easier with clearly assigned responsibilities.
+   706→5. The workload is manageable for a 5th-semester academic project.
+   707→
+   708→My recommendation: Use three team members if available. If the project must be completed by two students, combine data management and testing responsibilities with the backend role.
+   709→
+   710→## 3.8 Estimated Effort for the Recommended Project
+   711→
+   712→For planning purposes, consider the medium-sized implementation of approximately 3,500 SLOC.
+   713→
+   714→| Parameter                  | Estimated Value    |
+   715→| -------------------------- | ------------------ |
+   716→| Project size               | 3,500 SLOC         |
+   717→| Development model          | Agile              |
+   718→| COCOMO mode                | Organic            |
+   719→| Total effort               | 8.94 Person-Months |
+   720→| Development time           | 5.75 Months        |
+   721→| Average staffing           | 1.56 persons       |
+   722→| Recommended practical team | 2–3 members        |
+   723→
+   724→Important: COCOMO's development duration is a model estimate, not a guaranteed academic submission deadline. It assumes a conventional full-time project environment. Actual calendar duration will depend on the students' available working hours, experience, and academic schedule. Adding more team members does not automatically reduce development time in direct proportion because integration and coordination also require effort.
+   725→
+   726→# 4. Final Project Architecture Recommendations
+   727→
+   728→Based on the SDLC evaluation, requirements analysis, and COCOMO estimation, the following development strategy is recommended.
+   729→
+   730→## Recommended project configuration
+   731→
+   732→SDLC MODEL
+   733→
+   734→Agile
+   735→
+   736→COCOMO MODE
+   737→
+   738→Organic
+   739→
+   740→ESTIMATED PROJECT SIZE
+   741→
+   742→3.5 KLOC
+   743→
+   744→TOTAL EFFORT
+   745→
+   746→8.94 Person-Months
+   747→
+   748→RECOMMENDED TEAM
+   749→
+   750→2–3 Members
+   751→
+   752→ESTIMATED DURATION
+   753→
+   754→5.75 Months
+   755→
+   756→Technology stack
+   757→
+   758→- Programming: Python
+   759→- Frontend: Streamlit
+   760→- Data processing: pandas, NumPy
+   761→- Visualization: Plotly
+   762→- Storage: JSON / CSV
+   763→- Testing: pytest
+   764→
+   765→## 4.1 Recommended Development Phases
+   766→
+   767→| Phase                   | Main Activities                               |
+   768→| ----------------------- | --------------------------------------------- |
+   769→| 1. Requirement Analysis | Finalize SRS and functional requirements      |
+   770→| 2. System Design        | Design architecture, data structures, and UI  |
+   771→| 3. Implementation       | Develop syllabus and analytics modules        |
+   772→| 4. Integration          | Connect scheduling engine with Streamlit      |
+   773→| 5. Testing              | Perform unit, integration, and system testing |
+   774→| 6. Deployment           | Run and demonstrate the application           |
+   775→| 7. Maintenance          | Fix bugs and improve functionality            |
+   776→
+   777→## 4.2 Important Architectural Recommendation
+   778→
+   779→One important point for your project presentation is the meaning of "AI-Powered."
+   780→
+   781→Your current SRS specifies a weighted rule-based complexity model, familiarity multipliers, and a scheduling algorithm. This is a perfectly reasonable approach for a 5th-semester project.
+   782→
+   783→However, unless you actually train and evaluate a machine-learning model, describe the first version as:
+   784→
+   785→"An intelligent, rule-based study planning system with personalized difficulty estimation."
+   786→
+   787→You can introduce regression-based preparation-time prediction as a future enhancement. This makes your project explanation technically accurate and easier to defend during evaluation.
+   788→
+   789→# 5. Final Conclusion
+   790→
+   791→The AI-Powered Smart Study Planner & Syllabus Breakdown Tool is suitable for development using the Agile SDLC model because it supports iterative development, modular implementation, and continuous testing.
+   792→
+   793→The system's functional requirements focus on syllabus management, topic complexity estimation, personalized study-time calculation, automated scheduling, High-Yield Mode, and progress tracking. Its non-functional requirements ensure performance, usability, reliability, portability, and maintainability.
+   794→
+   795→Using the Basic COCOMO Organic Mode, a medium-sized implementation of approximately 3,500 SLOC requires an estimated 8.94 person-months of effort, with a nominal development duration of approximately 5.75 months.
+   796→
+   797→A team of two to three students is recommended to complete the project efficiently.
+   798→
+   799→The combination of Agile development, a modular Python architecture, and an explainable scheduling algorithm provides a practical foundation for successful academic project development and demonstration.
+   800→
+   801→Suggested next step: Prepare the Software Design Document (SDD), including the Use Case Diagram, Data Flow Diagram (DFD Level 0 and Level 1), ER Diagram, and module-wise architecture based on this SRS.
+   802→
